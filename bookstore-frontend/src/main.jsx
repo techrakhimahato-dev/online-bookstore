@@ -141,6 +141,21 @@ function statusMeta(status) {
   return availabilityOptions.find((option) => option.value === status) || availabilityOptions[0];
 }
 
+function AnimatedWords({ text }) {
+  const words = text.split(' ');
+
+  return words.map((word, index) => (
+    <span
+      className="animated-word"
+      style={{ '--word-delay': `${index * 65}ms` }}
+      key={`${word}-${index}`}
+    >
+      {word}
+      {index < words.length - 1 ? '\u00a0' : ''}
+    </span>
+  ));
+}
+
 function normalizeBook(book) {
   const stockQuantity = Math.max(0, Number(book.stockQuantity) || 0);
 
@@ -481,19 +496,19 @@ function App() {
       </header>
 
       {view === 'home' && (
-        <main>
-          <section className="border-b border-[#ded6c8] bg-[#fffdf8]">
+        <main className="page-enter">
+          <section className="hero-section border-b border-[#ded6c8] bg-[#fffdf8]">
             <div className="mx-auto grid max-w-7xl gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[1fr_390px] lg:px-8">
-              <div className="flex flex-col justify-center">
-                <div className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-[#ded6c8] bg-[#f6f4ee] px-3 py-1 text-sm font-bold text-[#5c5047]">
+              <div className="hero-copy flex flex-col justify-center">
+                <div className="hero-kicker mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-[#ded6c8] bg-[#f6f4ee] px-3 py-1 text-sm font-bold text-[#5c5047]">
                   <BookOpen size={16} />
                   Customer catalog
                 </div>
-                <h1 className="max-w-3xl text-3xl font-black leading-tight tracking-normal text-[#251c16] sm:text-5xl">
+                <h1 className="hero-title max-w-3xl text-3xl font-black leading-tight tracking-normal text-[#251c16] sm:text-5xl">
                   Find books, check stock, and see what needs ordering.
                 </h1>
 
-                <div className="mt-7 grid gap-3 lg:grid-cols-[1fr_180px_180px]">
+                <div className="hero-controls mt-7 grid gap-3 lg:grid-cols-[1fr_180px_180px]">
                   <label className="search-shell">
                     <Search className="shrink-0 text-[#75695d]" size={22} />
                     <input
@@ -534,9 +549,9 @@ function App() {
                 </div>
               </div>
 
-              <div className="relative min-h-[320px] overflow-hidden rounded-lg bg-[#28483b] shadow-xl">
+              <div className="hero-image-panel relative min-h-[320px] overflow-hidden rounded-lg bg-[#28483b] shadow-xl">
                 <img
-                  className="absolute inset-0 h-full w-full object-cover opacity-70"
+                  className="hero-shelf-image absolute inset-0 h-full w-full object-cover opacity-70"
                   src="https://images.unsplash.com/photo-1526243741027-444d633d7365?auto=format&fit=crop&w=1200&q=80"
                   alt="Bookstore shelves"
                 />
@@ -592,10 +607,11 @@ function App() {
                 </div>
               ) : filteredBooks.length > 0 ? (
                 <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                  {filteredBooks.map((book) => (
+                  {filteredBooks.map((book, index) => (
                     <BookCard
                       key={book.id}
                       book={book}
+                      index={index}
                       selected={activeBook?.id === book.id}
                       onSelect={() => setActiveBookId(book.id)}
                     />
@@ -618,8 +634,8 @@ function App() {
       )}
 
       {view === 'login' && (
-        <main className="mx-auto grid min-h-[calc(100vh-73px)] max-w-7xl place-items-center px-4 py-10 sm:px-6 lg:px-8">
-          <section className="grid w-full max-w-5xl overflow-hidden rounded-lg border border-[#ded6c8] bg-white shadow-xl lg:grid-cols-[0.95fr_1.05fr]">
+        <main className="page-enter mx-auto grid min-h-[calc(100vh-73px)] max-w-7xl place-items-center px-4 py-10 sm:px-6 lg:px-8">
+          <section className="auth-panel grid w-full max-w-5xl overflow-hidden rounded-lg border border-[#ded6c8] bg-white shadow-xl lg:grid-cols-[0.95fr_1.05fr]">
             <div className="bg-[#28483b] p-8 text-white sm:p-10">
               <ShieldCheck size={34} className="text-[#f1c86b]" />
               <h1 className="mt-6 text-3xl font-black tracking-normal">
@@ -702,7 +718,7 @@ function App() {
 
 function Metric({ value, label }) {
   return (
-    <div className="rounded-lg border border-white/15 bg-white/10 p-3">
+    <div className="metric-card rounded-lg border border-white/15 bg-white/10 p-3">
       <span className="block text-2xl font-black">{value}</span>
       <span className="text-xs font-bold text-white/75">{label}</span>
     </div>
@@ -726,15 +742,16 @@ function StatusBadge({ status }) {
   );
 }
 
-function BookCard({ book, selected, onSelect }) {
+function BookCard({ book, index, selected, onSelect }) {
   return (
     <button
       className={`book-card text-left ${selected ? 'border-[#28483b] ring-4 ring-[#d8e7dc]' : 'border-[#ded6c8]'
         }`}
+      style={{ '--card-delay': `${Math.min(index, 12) * 45}ms` }}
       onClick={onSelect}
     >
-      <div className="aspect-[4/5] overflow-hidden rounded-md bg-[#efe8dc]">
-        <img className="h-full w-full object-cover" src={book.coverImage} alt={`${book.title} cover`} />
+      <div className="book-cover-frame aspect-[4/5] overflow-hidden rounded-md bg-[#efe8dc]">
+        <img className="book-cover h-full w-full object-cover" src={book.coverImage} alt={`${book.title} cover`} />
       </div>
       <div className="mt-4 flex items-start justify-between gap-3">
         <div className="min-w-0">
@@ -753,7 +770,7 @@ function BookCard({ book, selected, onSelect }) {
 
 function BookDetails({ book }) {
   return (
-    <aside className="h-fit rounded-lg border border-[#ded6c8] bg-white p-5 shadow-sm lg:sticky lg:top-24">
+    <aside key={book.id} className="details-panel h-fit rounded-lg border border-[#ded6c8] bg-white p-5 shadow-sm lg:sticky lg:top-24">
       <div className="flex items-center gap-2 text-sm font-black text-[#75695d]">
         <BookOpen size={17} />
         Book details
@@ -814,8 +831,8 @@ function AdminDashboard({
   }
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+    <main className="page-enter mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="admin-heading mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-black tracking-normal">Admin Dashboard</h1>
           <p className="mt-2 font-semibold text-[#75695d]">
@@ -836,7 +853,7 @@ function AdminDashboard({
       )}
 
       <div className="grid gap-8 lg:grid-cols-[400px_1fr]">
-        <form className="h-fit rounded-lg border border-[#ded6c8] bg-white p-5 shadow-sm" onSubmit={saveBook}>
+        <form className="admin-form h-fit rounded-lg border border-[#ded6c8] bg-white p-5 shadow-sm" onSubmit={saveBook}>
           <div className="flex items-center justify-between gap-3">
             <h2 className="text-xl font-black tracking-normal">
               {editingId ? 'Edit Book' : 'Add New Book'}
@@ -959,7 +976,7 @@ function AdminDashboard({
           </button>
         </form>
 
-        <section className="overflow-hidden rounded-lg border border-[#ded6c8] bg-white shadow-sm">
+        <section className="inventory-panel overflow-hidden rounded-lg border border-[#ded6c8] bg-white shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#ded6c8] p-5">
             <h2 className="text-xl font-black tracking-normal">Inventory</h2>
             <span className="rounded-full bg-[#f6f4ee] px-3 py-1 text-xs font-black text-[#75695d]">
@@ -979,8 +996,12 @@ function AdminDashboard({
                 </tr>
               </thead>
               <tbody>
-                {books.map((book) => (
-                  <tr key={book.id} className="border-t border-[#eee6da]">
+                {books.map((book, index) => (
+                  <tr
+                    key={book.id}
+                    className="inventory-row border-t border-[#eee6da]"
+                    style={{ '--row-delay': `${Math.min(index, 12) * 35}ms` }}
+                  >
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-3">
                         <img className="h-14 w-11 rounded object-cover" src={book.coverImage} alt="" />
@@ -1056,7 +1077,7 @@ function AdminDashboard({
 
 function MetricBlock({ icon, label, value }) {
   return (
-    <div className="min-w-24 rounded-lg border border-[#ded6c8] bg-white p-3 shadow-sm">
+    <div className="metric-block min-w-24 rounded-lg border border-[#ded6c8] bg-white p-3 shadow-sm">
       <div className="flex items-center gap-2 text-[#2f6f5b]">{icon}</div>
       <p className="mt-2 text-2xl font-black">{value}</p>
       <p className="text-xs font-black uppercase text-[#75695d]">{label}</p>

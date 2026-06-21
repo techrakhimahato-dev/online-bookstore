@@ -1,0 +1,355 @@
+@import "tailwindcss";
+
+:root {
+  color: #251c16;
+  background: #f6f4ee;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    background: #f6f4ee;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  button,
+  select,
+  input,
+  textarea {
+    font: inherit;
+  }
+
+  button,
+  select {
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  .page-enter {
+    animation: pageFadeIn 520ms ease both;
+  }
+
+  .hero-kicker,
+  .hero-title,
+  .hero-controls,
+  .hero-image-panel,
+  .auth-panel,
+  .admin-heading,
+  .admin-form,
+  .inventory-panel {
+    animation: riseIn 650ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .hero-title {
+    animation-delay: 90ms;
+  }
+
+  .hero-controls {
+    animation-delay: 180ms;
+  }
+
+  .hero-image-panel {
+    animation-delay: 220ms;
+  }
+
+  .admin-form {
+    animation-delay: 110ms;
+  }
+
+  .inventory-panel {
+    animation-delay: 180ms;
+  }
+
+  .hero-image-panel::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.18), transparent 80%);
+    transform: translateX(-110%);
+    animation: shelfSheen 4.8s ease-in-out 900ms infinite;
+    pointer-events: none;
+  }
+
+  .hero-shelf-image {
+    animation: slowShelfPan 16s ease-in-out infinite alternate;
+    transform-origin: center;
+  }
+
+  .metric-card,
+  .metric-block {
+    transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+  }
+
+  .metric-card:hover,
+  .metric-block:hover {
+    transform: translateY(-3px);
+  }
+
+  .nav-button {
+    @apply rounded-md px-3 py-2 text-sm font-black transition;
+    color: #5c5047;
+  }
+
+  .nav-button:hover {
+    background: #e9e1d4;
+    color: #251c16;
+  }
+
+  .icon-button {
+    @apply grid h-10 w-10 place-items-center rounded-md border bg-white transition;
+    border-color: #ded6c8;
+    color: #5c5047;
+  }
+
+  .icon-button:hover {
+    border-color: #28483b;
+    color: #28483b;
+    transform: translateY(-1px);
+  }
+
+  .icon-button.danger {
+    @apply hover:border-rose-300 hover:bg-rose-50 hover:text-rose-700;
+  }
+
+  .primary-button {
+    @apply inline-flex items-center justify-center gap-2 rounded-md px-4 py-3 text-sm font-black text-white transition;
+    background: #28483b;
+  }
+
+  .primary-button:hover {
+    background: #1d352b;
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px -18px rgba(29, 53, 43, 0.65);
+  }
+
+  .secondary-button {
+    @apply inline-flex items-center justify-center rounded-md border bg-white px-3 py-2 text-sm font-black transition;
+    border-color: #cfc4b3;
+    color: #5c5047;
+  }
+
+  .secondary-button:hover {
+    border-color: #28483b;
+    color: #28483b;
+    transform: translateY(-1px);
+  }
+
+  .search-shell {
+    @apply flex min-h-12 items-center gap-3 rounded-lg border bg-white px-4 py-3 shadow-sm transition;
+    border-color: #cfc4b3;
+  }
+
+  .search-shell:focus-within {
+    border-color: #28483b;
+    box-shadow: 0 0 0 4px #d8e7dc;
+  }
+
+  .select-shell {
+    @apply flex min-h-12 items-center gap-2 rounded-lg border bg-white px-3 py-2 shadow-sm transition;
+    border-color: #cfc4b3;
+    color: #75695d;
+  }
+
+  .select-shell:focus-within {
+    border-color: #28483b;
+    box-shadow: 0 0 0 4px #d8e7dc;
+  }
+
+  .select-shell select {
+    @apply min-w-0 flex-1 bg-transparent text-sm font-black outline-none;
+    color: #251c16;
+  }
+
+  .chip {
+    @apply inline-flex items-center rounded-full border bg-white px-3 py-1 text-xs font-black shadow-sm transition;
+    border-color: #ded6c8;
+    color: #5c5047;
+  }
+
+  .chip:hover {
+    border-color: #bcae9b;
+    color: #251c16;
+    transform: translateY(-1px);
+  }
+
+  .book-card {
+    @apply rounded-lg border bg-white p-3 shadow-sm transition;
+    animation: cardIn 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--card-delay, 0ms);
+    transform-origin: center bottom;
+  }
+
+  .book-card:hover {
+    transform: translateY(-5px);
+    box-shadow:
+      0 18px 45px -30px rgba(37, 28, 22, 0.45),
+      0 8px 18px -16px rgba(37, 28, 22, 0.28);
+  }
+
+  .book-cover-frame {
+    position: relative;
+  }
+
+  .book-cover-frame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent 45%);
+    opacity: 0;
+    transition: opacity 260ms ease;
+  }
+
+  .book-cover {
+    transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), filter 260ms ease;
+  }
+
+  .book-card:hover .book-cover {
+    transform: scale(1.055);
+    filter: saturate(1.08);
+  }
+
+  .book-card:hover .book-cover-frame::after {
+    opacity: 1;
+  }
+
+  .details-panel {
+    animation: detailsIn 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .form-label {
+    @apply block text-sm font-black;
+    color: #4e443b;
+  }
+
+  .field {
+    @apply mt-2 w-full rounded-md border bg-white px-3 py-2 text-sm outline-none transition;
+    border-color: #cfc4b3;
+    color: #251c16;
+  }
+
+  .field:focus {
+    border-color: #28483b;
+    box-shadow: 0 0 0 4px #d8e7dc;
+  }
+
+  .compact-select {
+    @apply h-10 rounded-md border bg-white px-2 text-xs font-black outline-none transition;
+    border-color: #cfc4b3;
+    color: #251c16;
+  }
+
+  .compact-select:focus {
+    border-color: #28483b;
+    box-shadow: 0 0 0 4px #d8e7dc;
+  }
+
+  .inventory-row {
+    animation: rowIn 420ms ease both;
+    animation-delay: var(--row-delay, 0ms);
+    transition: background-color 180ms ease;
+  }
+
+  .inventory-row:hover {
+    background: #fffaf1;
+  }
+}
+
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes detailsIn {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes rowIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slowShelfPan {
+  from {
+    transform: scale(1.03) translateX(-1%);
+  }
+  to {
+    transform: scale(1.09) translateX(1%);
+  }
+}
+
+@keyframes shelfSheen {
+  0%,
+  45% {
+    transform: translateX(-110%);
+  }
+  70%,
+  100% {
+    transform: translateX(110%);
+  }
+}
+
+@media (max-width: 640px) {
+  .compact-select {
+    width: 128px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+}
