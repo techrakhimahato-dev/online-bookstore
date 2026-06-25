@@ -2,17 +2,19 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
-    "preview": "vite preview --host 127.0.0.1"
+    "preview": "vite preview --host 127.0.0.1",
+    "cy:open": "cypress open"
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
-    "vite": "latest",
+    "lucide-react": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "lucide-react": "latest"
+    "vite": "latest"
   },
   "devDependencies": {
-    "tailwindcss": "latest",
-    "@tailwindcss/vite": "latest"
+    "@tailwindcss/vite": "latest",
+    "cypress": "^15.18.0",
+    "tailwindcss": "latest"
   }
 }
