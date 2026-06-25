@@ -21,7 +21,7 @@ import './styles.css';
 
 const storageKey = 'patan-dhoka-books-inventory';
 const authStorageKey = 'patan-dhoka-books-auth-token';
-const apiBaseUrl = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, '');
+const apiBaseUrl = (import.meta.env.VITE_API_URL || 'https://online-bookstore-uj9y.onrender.com').replace(/\/$/, '');
 
 const availabilityOptions = [
   { value: 'available', label: 'Available', tone: 'success' },
